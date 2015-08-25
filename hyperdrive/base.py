@@ -3,7 +3,7 @@
 import eventlet
 from jsonschema import validate
 
-from nae import db
+from hyperdrive import db
 
 class Base(object):
     def __init__(self):

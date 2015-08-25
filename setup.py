@@ -2,34 +2,25 @@
 
 from setuptools import setup
 
-setup(name='nae',
+setup(name='hyperdrive',
       version='1.0',
-      description='app engine',
+      description='api driver',
       author='nmg',
-      author_email='minguon@jumei.com',
-      url='https://git.oschina.net/nmg/nae.git',
+      author_email='nmg1986@126.com',
+      url='https://github.com/nmg1986/hyperdrive.git',
 
-      packages=['nae',
-		'nae.common',
-		'nae.common.rpc',
-		'nae.api',
-		'nae.container',
-		'nae.image',
-		'nae.db',
-		'nae.scheduler',
-		'nae.network',
-                'nae.web',
-                'nae.web.controller',
-                'nae.web.template',
+      packages=['hyperdrive',
+		'hyperdrive.common',
+		'hyperdrive.common.rpc',
+		'hyperdrive.api',
+		'hyperdrive.container',
+		'hyperdrive.image',
+		'hyperdrive.db',
 	       ],
-      package_data = {'nae.web.template': ['*.html']},
 
-      scripts=['bin/nae-api',
-	       'bin/nae-container',
-	       'bin/nae-image',
-               'bin/nae-web'],
+      scripts=['bin/hyperdrive']
 
-      data_files=[('/etc/nae',['etc/nae.conf',
+      data_files=[('/etc/hyperdrive',['etc/hyperdrive.conf',
 			       'etc/api-paste.ini',
 			      ]
 		 )]
