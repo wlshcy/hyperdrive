@@ -1,5 +1,5 @@
     
-from nae.common.parser import BaseParser
+from hyperdrive.common.parser import BaseParser
 
 class Bool(object):
     _boolean_states = {'1': True, '0': False, 
@@ -50,7 +50,7 @@ class ConfigParser(BaseParser):
 
 CONF=ConfigParser()
 
-DEFAULT_CONF_FILE = "/etc/nae/nae.conf"
+DEFAULT_CONF_FILE = "/etc/hyperdrive/hyperdrive.conf"
 
 def parse_config():
     try:

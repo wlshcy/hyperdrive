@@ -1,14 +1,14 @@
 import os
-from nae import wsgi
+from hyperdrive import wsgi
 import eventlet
 import time
 import signal
-from nae.common import log as logging
-from nae.common import cfg
-from nae.common.cfg import Int
-from nae.common import rpc
-from nae.common import importutils
-from nae.common import loopingcall
+from hyperdrive.common import log as logging
+from hyperdrive.common import cfg
+from hyperdrive.common.cfg import Int
+from hyperdrive.common import rpc
+from hyperdrive.common import importutils
+from hyperdrive.common import loopingcall
 
 CONF = cfg.CONF
 LOG = logging.getLogger(__name__)

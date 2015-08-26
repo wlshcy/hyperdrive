@@ -8,16 +8,16 @@ from hyperdrive.common import cfg
 from hyperdrive.common import timeutils
 from hyperdrive.base import Base
 
-CONF=cfg.CONF
+CONF = cfg.CONF
 
-LOG=logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 class Controller(Base):
     def __init__(self):
-	super(Controller,self).__init__()
+        super(Controller, self).__init__()
 
-    def index(self,request):
-	"""
+    def index(self, request):
+	    """
         List all items 
         
         This method returns a dictionary list and each dict contains the following keys:
@@ -27,11 +27,11 @@ class Controller(Base):
             - price 
             - size
         If no item found, empty list will be returned.
-	"""
+        """
         items = []
 
-        querys = self.db.get_items()
-        for query in querys:
+        queries = self.db.get_items()
+        for query in queries:
             item = {
                 'id': query.id,
                 'name': query.name,
@@ -57,7 +57,7 @@ class Controller(Base):
         If no item found, empty dictionary will returned.
         """
 
-	item = {}
+	    item = {}
         query= self.db.get_item(id)
         if query is not None:
             item = {

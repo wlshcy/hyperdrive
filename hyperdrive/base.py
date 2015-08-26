@@ -7,7 +7,7 @@ from hyperdrive import db
 
 class Base(object):
     def __init__(self):
-	self.db = db.API()
+	    self.db = db.API()
         self.validator = validate
         
     def run_task(func,*args):
