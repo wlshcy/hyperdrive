@@ -11,14 +11,11 @@ setup(name='hyperdrive',
 
       packages=['hyperdrive',
 		'hyperdrive.common',
-		'hyperdrive.common.rpc',
 		'hyperdrive.api',
-		'hyperdrive.container',
-		'hyperdrive.image',
 		'hyperdrive.db',
 	       ],
 
-      scripts=['bin/hyperdrive']
+      scripts=['bin/hyperdrive'],
 
       data_files=[('/etc/hyperdrive',['etc/hyperdrive.conf',
 			       'etc/api-paste.ini',
