@@ -2,6 +2,7 @@ import routes
 
 from hyperdrive import wsgi
 from hyperdrive.api import items
+from hyperdrive.api import orders
 
 
 class APIRouter(wsgi.Router):
@@ -17,3 +18,5 @@ class APIRouter(wsgi.Router):
         """
 
         self.mapper.resource('item', 'items', controller=items.create_resource())
+
+        self.mapper.resource('order', 'orders', controller=orders.create_resource())

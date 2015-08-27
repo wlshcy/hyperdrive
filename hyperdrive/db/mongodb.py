@@ -12,6 +12,7 @@ import time
 
 logger = logging.getLogger(__name__)
 
+
 class MongoAPI(object):
     def __init__(self, host, port, db):
         self.host = host
@@ -79,4 +80,27 @@ class MongoAPI(object):
         """
         coll = self.connection[self.db][invent]
 
-        return coll.find({'id': id})
+        return coll.find_one({'id': id})
+
+    def delete_item(self, id, invent='items'):
+        """
+        Delete item according item id.
+        @param id: the item id
+        @param invent: the item table
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.remove({'id': id})
+
+    def update_item(self, id, data, invent='items'):
+        """
+        Update item information.
+        @param data:
+        @param invent:
+        """
+        query = {'id': id}
+        update = {'$set': data}
+
+        coll = self.connection[self.db][invent]
+
+        return coll.update(query, update)

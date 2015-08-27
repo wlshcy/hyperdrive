@@ -1,3 +1,5 @@
+__author__ = 'nmg'
+
 import uuid
 from hyperdrive import wsgi
 from hyperdrive.common import log as logging
@@ -17,63 +19,72 @@ class Controller(Base):
 
     def index(self, req):
         """
-        List all items 
-        
+        List all items
+
         This method returns a dictionary list and each dict contains the following keys:
-            - id 
-            - name 
-            - img 
-            - price 
-            - size
+            - id
+            - number
+            - price
+            - address
+            - status
+            - payed
+            - weight
+            - created
         If no item found, empty list will be returned.
         """
 
-        items = []
+        orders = []
 
         # FIXME(nmg): should catch exception if any
-        queries = self.db.get_items()
+        queries = self.db.get_orders()
 
         for query in queries:
             item = {
                 'id': query['id'],
-                'name': query['name'],
+                'number': query['number'],
                 'img': query['img'],
                 'price': query['price'],
-                'size': query['size']
+                'status': query['status'],
+                'payed': query['payed'],
+                'weight': query['weight'],
+                'created': query['created']
             }
-            items.append(item)
+            orders.append(item)
 
-        return HttpResponse(items)
+        return HttpResponse(orders)
 
     def show(self, req, id):
         """
         Show the item info according to item's id `id`.
 
         This method returns a dictionary with following keys:
-            - id
-            - name
-            - img
+            - number
+            - items
             - price
-            - size
-            - origin
+            - address
+            - created
+            - status
+            - payed
         If no item found, empty dictionary will returned.
         """
 
-        item = {}
+        order = {}
 
         # FIXME(nmg): should catch exception if any
-        query = self.db.get_item(id)
+        query = self.db.get_order(id)
 
         if query is not None:
-            item = {
-                'name': query['name'],
-                'img': query['img'],
+            order = {
+                'number': query['number'],
+                'items': query['items'],
                 'price': query['price'],
-                'origin': query['origin'],
-                'desc': query['desc']
+                'address': query['address'],
+                'created': query['created'],
+                'status': query['status'],
+                'payed': query['payed']
             }
 
-        return HttpResponse(item)
+        return HttpResponse(order)
 
     def create(self, req, body=None):
         """

@@ -22,4 +22,5 @@ hyperdrive/common/response.py
 hyperdrive/common/timeutils.py
 hyperdrive/common/utils.py
 hyperdrive/db/__init__.py
+hyperdrive/db/cache.py
 hyperdrive/db/mongodb.py
