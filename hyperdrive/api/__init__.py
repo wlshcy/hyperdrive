@@ -15,5 +15,5 @@ class APIRouter(wsgi.Router):
         """
         The following `mapper.resource` will generated the following routes:
         """
-        
+
         self.mapper.resource('item', 'items', controller=items.create_resource())

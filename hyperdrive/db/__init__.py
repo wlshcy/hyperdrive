@@ -1,15 +1,15 @@
-import sys
-import os
+from hyperdrive.db.mongodb import MongoAPI
+from hyperdrive.common import cfg
 
-class API(object):
+CONF = cfg.CONF
+
+
+class API(MongoAPI):
     def __init__(self):
-	self.__backend=None
 
-    def __get_backend(self):
-	if not self.__backend:
-            self.__backend = __import__('nae.db.api',None,None,'*')
-        return self.__backend
+        super(API, self).__init__(CONF.mongo_host,
+                                  CONF.mongo_port,
+                                  CONF.mongo_db)
 
-    def __getattr__(self, key):
-        backend = self.__get_backend()
-        return getattr(backend, key)
+    def __getattr__(self, item):
+        return getattr(self, item)
