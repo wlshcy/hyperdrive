@@ -5,12 +5,14 @@ from hyperdrive import wsgi
 from hyperdrive.common import log as logging
 from hyperdrive.common.response import Response, HttpResponse
 from hyperdrive.common import cfg
+from hyperdrive.common import utils
 from hyperdrive.base import Base
 import time
+import webob.exc
 
 CONF = cfg.CONF
 
-LOG = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Controller(Base):
@@ -27,7 +29,6 @@ class Controller(Base):
             - price
             - address
             - status
-            - payed
             - weight
             - created
         If no item found, empty list will be returned.
@@ -35,8 +36,11 @@ class Controller(Base):
 
         orders = []
 
-        # FIXME(nmg): should catch exception if any
-        queries = self.db.get_orders()
+        # FIXME(nmg): should catch all exception if any
+        try:
+            queries = self.db.get_orders()
+        except AttributeError:
+            return webob.exc.HTTPInternalServerError()
 
         for query in queries:
             item = {
@@ -45,7 +49,6 @@ class Controller(Base):
                 'img': query['img'],
                 'price': query['price'],
                 'status': query['status'],
-                'payed': query['payed'],
                 'weight': query['weight'],
                 'created': query['created']
             }
@@ -64,24 +67,23 @@ class Controller(Base):
             - address
             - created
             - status
-            - payed
-        If no item found, empty dictionary will returned.
+        If no item found, 404 will returned.
         """
-
-        order = {}
 
         # FIXME(nmg): should catch exception if any
         query = self.db.get_order(id)
 
-        if query is not None:
-            order = {
-                'number': query['number'],
-                'items': query['items'],
-                'price': query['price'],
-                'address': query['address'],
-                'created': query['created'],
-                'status': query['status'],
-                'payed': query['payed']
+        if not query:
+            return webob.exc.HTTPNotFound()
+
+        order = {
+            'number': query['number'],
+            'items': query['items'],
+            'price': query['price'],
+            'address': query['address'],
+            'created': query['created'],
+            'status': query['status'],
+            'payed': query['payed']
             }
 
         return HttpResponse(order)
@@ -90,33 +92,88 @@ class Controller(Base):
         """
         For creating item, body should not be None and
         should contains the following params:
-            - name        the name of the item
-            - img         the image's of the item
-            - price       the price of the item
-            - size        the size of the item
-            - origin      the origin of the item
+            - address  the address of the order
+            - items    the items list
+            - price    the total price of the order
+            - weight   the total weight of the order
         """
-        id = uuid.uuid4().hex
-        name = body.pop('name')
-        img = body.pop('img')
-        price = body.pop('price')
-        size = body.pop('size')
-        origin = body.pop('origin')
-        desc = body.pop('desc')
+        try:
+            address = body.pop('address')
+            items = body.pop('items')
+            price = body.pop('price')
+            weight = body.pop('weight')
+        except KeyError as exc:
+            logger.error(exc)
+            return webob.exc.HTTPBadRequest()
+
+        __id__ = uuid.uuid4().hex
+        number = utils.generate_order_number()
+        status = 0
+        uid = self.uid
         created = round(time.time() * 1000)
 
-        item = {'id': id,
+        order = {
+            'id': __id__,
+            'number': number,
+            'uid': uid,
+            'price': price,
+            'weight': weight,
+            'status': status,
+            'address': address,
+            'created': created
+            }
+
+        # FIXME(nmg): should catch exception if any
+        self.db.add_order(order)
+
+        """
+        Inset item in table `order_item`.
+        For doing this you should get the following value for each item:
+        - id
+        - iid
+        - number
+        - name
+        - img
+        - price
+        - size
+        - count
+        - created
+        """
+        item_list = []
+        for member in items:
+            iid = member['id']
+
+            # FIXME(nmg): should catch exception if any
+            __item__ = self.db.get_item(iid)
+
+            try:
+                name = __item__['name']
+                img = __item__['img']
+                price = __item__['price']
+                size = __item__['size']
+            except KeyError as exc:
+                logger.error(exc)
+                return webob.exc.HTTPBadRequest()
+
+            count = member['count']
+            created = created
+            __id__ = uuid.uuid4().hex
+            item = {
+                'id': __id__,
+                'iid': iid,
+                'number': number,
                 'name': name,
                 'img': img,
                 'price': price,
                 'size': size,
-                'origin': origin,
-                'desc': desc,
+                'count': count,
                 'created': created
-                }
+            }
+
+            item_list.append(item)
 
         # FIXME(nmg): should catch exception if any
-        self.db.add_item(item)
+        self.db.add_order_items(item_list)
 
         return Response(201)
 

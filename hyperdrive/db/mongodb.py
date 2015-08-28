@@ -69,7 +69,7 @@ class MongoAPI(object):
 
         return coll.find({})
 
-    def get_item(self,  id, invent='items'):
+    def get_item(self,  __id__, invent='items'):
         """
         Get specified item according item id.
 
@@ -80,7 +80,7 @@ class MongoAPI(object):
         """
         coll = self.connection[self.db][invent]
 
-        return coll.find_one({'id': id})
+        return coll.find_one({'id': __id__})
 
     def delete_item(self, id, invent='items'):
         """
@@ -92,15 +92,74 @@ class MongoAPI(object):
 
         return coll.remove({'id': id})
 
-    def update_item(self, id, data, invent='items'):
+    def update_item(self, __id__, data, invent='items'):
         """
         Update item information.
         @param data:
         @param invent:
         """
-        query = {'id': id}
+        query = {'id': __id__}
         update = {'$set': data}
 
         coll = self.connection[self.db][invent]
 
         return coll.update(query, update)
+
+    def add_order(self, order, coll='orders'):
+        """
+        Insert items in collection.
+
+        @param coll: the collection, default to `items`
+        @param order: the order be saved
+
+        @return: a WriteResult object that contains the status of the operation(not used currently)
+        """
+        coll = self.connection[self.db][coll]
+
+        return coll.insert(order)
+
+    def get_orders(self, invent='orders'):
+        """
+        Get orders from collection.
+
+        @param invent: the collection
+
+        @return: `pymongo.cursor.Cursor object`
+        """
+
+        coll = self.connection[self.db][invent]
+
+        return coll.find({})
+
+    def get_order(self,  __id__, invent='orders'):
+        """
+        Get specified order according order id.
+
+        @param invent: the item table
+        @param id: the order id
+
+        @return: `pymongo.cursor.Cursor object`
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.find_one({'id': __id__})
+
+    def delete_order(self, __id__, invent='orders'):
+        """
+        Delete item according order id.
+        @param id: the order id
+        @param invent: the order table
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.remove({'id': __id__})
+
+    def add_order_items(self, item_list, coll='order_items'):
+        """
+        Add order items in `order_items`
+        @param item_list: order items list
+        @param coll: table to insert
+        """
+        coll = self.connection[self.db][coll]
+
+        return coll.insert(item_list)

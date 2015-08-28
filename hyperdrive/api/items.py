@@ -5,6 +5,8 @@ from hyperdrive.common.response import Response, HttpResponse
 from hyperdrive.common import cfg
 from hyperdrive.base import Base
 import time
+import webob.exc
+from hyperdrive.common.exception import Fault
 
 CONF = cfg.CONF
 
@@ -56,22 +58,21 @@ class Controller(Base):
             - price
             - size
             - origin
-        If no item found, empty dictionary will returned.
+        If no item found, 404 will returned.
         """
-
-        item = {}
-
         # FIXME(nmg): should catch exception if any
         query = self.db.get_item(id)
 
-        if query is not None:
-            item = {
-                'name': query['name'],
-                'img': query['img'],
-                'price': query['price'],
-                'origin': query['origin'],
-                'desc': query['desc']
-            }
+        if not query:
+            return Fault(webob.exc.HTTPNotFound())
+
+        item = {
+            'name': query['name'],
+            'img': query['img'],
+            'price': query['price'],
+            'origin': query['origin'],
+            'desc': query['desc']
+        }
 
         return HttpResponse(item)
 

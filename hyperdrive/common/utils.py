@@ -8,6 +8,7 @@ import time
 import stat
 import pwd
 import uuid
+import time
 
 import eventlet
 
@@ -17,6 +18,13 @@ from nae.common import log as logging
 
 LOG = logging.getLogger(__name__)
 CONF = cfg.CONF
+
+
+def generate_order_number():
+    prefix = time.strftime("%Y%m%d", time.localtime())
+    suffix = str(random.randint(0, 99999999)).zfill(8)
+
+    return "".join([prefix, suffix])
 
 
 class ResponseSucceed(object):
