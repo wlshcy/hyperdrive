@@ -163,3 +163,26 @@ class MongoAPI(object):
         coll = self.connection[self.db][coll]
 
         return coll.insert(item_list)
+
+    def add_user(self, user, coll='users'):
+        """
+        Add new user in user table `users`.
+
+        @param user: the user object to be added
+        @param coll: the user table to add to
+        @return: nothing
+        """
+        coll = self.connection[self.db][coll]
+
+        return coll.insert(user)
+
+    def get_users(self, invent='users'):
+        """
+        Get all users.
+
+        @param invent: the user table
+        @return: `pymongo.cursor.Cursor object`
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.find({})
