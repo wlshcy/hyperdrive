@@ -6,6 +6,7 @@ from eventlet import wsgi
 
 import webob
 import webob.dec
+import webob.exc
 import routes.middleware
 from paste.deploy import loadapp
 from hyperdrive.common import log as logging
@@ -37,7 +38,7 @@ class Router(object):
     def _dispatch(req):
         match = req.environ['wsgiorg.routing_args'][1]
         if not match:
-            return webob.Response('{"error" : "404 Not Found"}')
+            return webob.exc.HTTPNotFound()
         app = match['controller']
         return app
 

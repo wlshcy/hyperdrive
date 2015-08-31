@@ -21,7 +21,7 @@ class Controller(Base):
 
     def index(self, req):
         """
-        List all items
+        List all orders
 
         This method returns a dictionary list and each dict contains the following keys:
             - id
@@ -31,7 +31,7 @@ class Controller(Base):
             - status
             - weight
             - created
-        If no item found, empty list will be returned.
+        If no order found, empty list will be returned.
         """
 
         orders = []
@@ -58,7 +58,7 @@ class Controller(Base):
 
     def show(self, req, id):
         """
-        Show the item info according to item's id `id`.
+        Show the order detail according to order's id `id`.
 
         This method returns a dictionary with following keys:
             - number
@@ -66,8 +66,7 @@ class Controller(Base):
             - price
             - address
             - created
-            - status
-        If no item found, 404 will returned.
+        If no order found, 404 will returned.
         """
 
         # FIXME(nmg): should catch exception if any
@@ -82,8 +81,6 @@ class Controller(Base):
             'price': query['price'],
             'address': query['address'],
             'created': query['created'],
-            'status': query['status'],
-            'payed': query['payed']
             }
 
         return HttpResponse(order)
@@ -108,7 +105,8 @@ class Controller(Base):
 
         __id__ = uuid.uuid4().hex
         number = utils.generate_order_number()
-        status = 0
+        payment = 0
+        delivery = 0
         uid = self.uid
         created = round(time.time() * 1000)
 
@@ -118,7 +116,8 @@ class Controller(Base):
             'uid': uid,
             'price': price,
             'weight': weight,
-            'status': status,
+            'payment': payment,
+            'delivery': delivery,
             'address': address,
             'created': created
             }

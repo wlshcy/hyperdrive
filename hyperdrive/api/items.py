@@ -37,7 +37,8 @@ class Controller(Base):
 
         for query in queries:
             item = {
-                'id': query['id'],
+                'id': str(query['_id']),
+                # 'id': query['id'],
                 'name': query['name'],
                 'img': query['img'],
                 'price': query['price'],
@@ -51,7 +52,7 @@ class Controller(Base):
         """
         Show the item info according to item's id `id`.
 
-        This method returns a dictionary with following keys:
+        This method returns a dictionary with the following keys:
             - id
             - name
             - img
@@ -86,7 +87,7 @@ class Controller(Base):
             - size        the size of the item
             - origin      the origin of the item
         """
-        id = uuid.uuid4().hex
+        # id = uuid.uuid4().hex
         name = body.pop('name')
         img = body.pop('img')
         price = body.pop('price')
@@ -95,15 +96,15 @@ class Controller(Base):
         desc = body.pop('desc')
         created = round(time.time() * 1000)
 
-        item = {'id': id,
-                'name': name,
-                'img': img,
-                'price': price,
-                'size': size,
-                'origin': origin,
-                'desc': desc,
-                'created': created
-                }
+        item = {
+            'name': name,
+            'img': img,
+            'price': price,
+            'size': size,
+            'origin': origin,
+            'desc': desc,
+            'created': created
+            }
 
         # FIXME(nmg): should catch exception if any
         self.db.add_item(item)
@@ -125,7 +126,7 @@ class Controller(Base):
         # FIXME(nmg): should catch exception if any
         self.db.update_item(id, body)
 
-        return Response(201)
+        return Response(200)
 
 
 def create_resource():
