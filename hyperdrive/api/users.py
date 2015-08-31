@@ -1,6 +1,6 @@
 __author__ = 'nmg'
 
-import uuid
+# import uuid
 from hyperdrive import wsgi
 from hyperdrive.common import log as logging
 from hyperdrive.common.response import Response, HttpResponse
@@ -8,7 +8,9 @@ from hyperdrive.common import cfg
 from hyperdrive.base import Base
 import time
 import webob.exc
-from hyperdrive.common.exception import Fault
+import os
+
+# from hyperdrive.common.exception import Fault
 
 CONF = cfg.CONF
 
@@ -74,13 +76,11 @@ class Controller(Base):
         password = self.encrypt_password(password)
 
         created = round(time.time() * 1000)
-        __id__ = uuid.uuid4().hex
+        # __id__ = uuid.uuid4().hex
 
-        user = {'id': __id__,
-                'mobile': mobile,
+        user = {'mobile': mobile,
                 'password': password,
-                'created': created
-                }
+                'created': created}
 
         # FIXME(nmg): should catch exception if any
         self.db.add_user(user)
@@ -113,6 +113,7 @@ class Controller(Base):
         @param password:
         @return: the encrypted password
         """
+
         return password
 
     def check_code(self, code):
