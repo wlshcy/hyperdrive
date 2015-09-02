@@ -6,6 +6,7 @@ from hyperdrive.common import log as logging
 from hyperdrive.common.response import Response, HttpResponse
 from hyperdrive.common import cfg
 from hyperdrive.base import Base
+from hyperdrive.common import utils
 import time
 import webob.exc
 import os
@@ -30,7 +31,6 @@ class Controller(Base):
             - mobile
         If no user found, empty list will be returned.
         """
-
         users = []
 
         # FIXME(nmg): should catch exception if any
@@ -38,7 +38,7 @@ class Controller(Base):
 
         for query in queries:
             user = {
-                'id': query['id'],
+                'id': str(query['_id']),
                 'mobile': query['mobile'],
                 'created': query['created'],
             }
@@ -63,15 +63,15 @@ class Controller(Base):
         try:
             mobile = body.pop('mobile')
             password = body.pop('password')
-            code = body.pop('code')
+            # code = body.pop('code')
         except KeyError:
             return webob.exc.HTTPBadRequest()
 
-        if check_exists(mobile):
-            return
-
-        if not check_code(code):
-            return
+        # if check_exists(mobile):
+        #     return
+        #
+        # if not check_code(code):
+        #     return
 
         password = self.encrypt_password(password)
 
@@ -104,7 +104,7 @@ class Controller(Base):
         @param mobile: the cell phone number to be checked
         @return: True or False
         """
-        return True or False
+        return True if self.db.get_user(mobile) else False
 
     @staticmethod
     def encrypt_password(password):
@@ -114,15 +114,17 @@ class Controller(Base):
         @return: the encrypted password
         """
 
-        return password
+        return utils.encrypt_password(password)
 
-    def check_code(self, code):
+    def check_code(self, mobile, code):
         """
         Check if the sms code is valid, if not return False, otherwise return True.
         @param code:
         @return: True or False
         """
-        return True
+        cached_code = self.cache.get(mobile)
+        return cached_code == code
+
 
 def create_resource():
     return wsgi.Resource(Controller())

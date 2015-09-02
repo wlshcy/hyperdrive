@@ -118,18 +118,20 @@ class MongoAPI(object):
 
         return coll.insert(order)
 
-    def get_orders(self, invent='orders'):
+    def get_orders(self, user_id, invent='orders'):
         """
         Get orders from collection.
 
         @param invent: the collection
+
+        @param user_id: the user id to retrieve
 
         @return: `pymongo.cursor.Cursor object`
         """
 
         coll = self.connection[self.db][invent]
 
-        return coll.find({})
+        return coll.find({'uid': user_id})
 
     def get_order(self,  __id__, invent='orders'):
         """
@@ -186,3 +188,14 @@ class MongoAPI(object):
         coll = self.connection[self.db][invent]
 
         return coll.find({})
+
+    def get_user(self, mobile, invent='users'):
+        """
+        Get specified user by mobile
+        @param mobile:
+        @param invent:
+        @return:
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.find_one({'mobile': mobile})

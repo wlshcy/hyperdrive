@@ -9,6 +9,7 @@ from hyperdrive.common import utils
 from hyperdrive.base import Base
 import time
 import webob.exc
+import jwt
 
 CONF = cfg.CONF
 
@@ -33,12 +34,23 @@ class Controller(Base):
             - created
         If no order found, empty list will be returned.
         """
+        try:
+            token = req.headers['X-AUTH-TOKEN']
+        except KeyError:
+            return webob.exc.HTTPUnauthorized()
+
+        try:
+            payload = jwt.decode(token)
+        except jwt.InvalidTokenError:
+            return webob.exc.HTTPUnauthorized()
+
+        user_id = payload['id']
 
         orders = []
 
         # FIXME(nmg): should catch all exception if any
         try:
-            queries = self.db.get_orders()
+            queries = self.db.get_orders(user_id)
         except AttributeError:
             return webob.exc.HTTPInternalServerError()
 
@@ -95,6 +107,18 @@ class Controller(Base):
             - weight   the total weight of the order
         """
         try:
+            token = req.headers['X-AUTH-TOKEN']
+        except KeyError:
+            return webob.exc.HTTPUnauthorized()
+
+        try:
+            payload = jwt.decode(token)
+        except jwt.InvalidTokenError:
+            return webob.exc.HTTPUnauthorized()
+
+        user_id = payload['id']
+
+        try:
             address = body.pop('address')
             items = body.pop('items')
             price = body.pop('price')
@@ -103,15 +127,15 @@ class Controller(Base):
             logger.error(exc)
             return webob.exc.HTTPBadRequest()
 
-        __id__ = uuid.uuid4().hex
+        # __id__ = uuid.uuid4().hex
         number = utils.generate_order_number()
         payment = 0
         delivery = 0
-        uid = self.uid
+        uid = user_id
         created = round(time.time() * 1000)
 
         order = {
-            'id': __id__,
+            # 'id': __id__,
             'number': number,
             'uid': uid,
             'price': price,
@@ -128,15 +152,15 @@ class Controller(Base):
         """
         Inset item in table `order_item`.
         For doing this you should get the following value for each item:
-        - id
-        - iid
-        - number
-        - name
-        - img
-        - price
-        - size
-        - count
-        - created
+            - id
+            - number
+            - iid
+            - name
+            - img
+            - price
+            - size
+            - count
+            - created
         """
         item_list = []
         for member in items:

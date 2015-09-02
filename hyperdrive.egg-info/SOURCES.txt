@@ -14,6 +14,7 @@ hyperdrive/api/__init__.py
 hyperdrive/api/auth.py
 hyperdrive/api/items.py
 hyperdrive/api/orders.py
+hyperdrive/api/sms.py
 hyperdrive/api/users.py
 hyperdrive/common/__init__.py
 hyperdrive/common/cfg.py
@@ -22,7 +23,6 @@ hyperdrive/common/importutils.py
 hyperdrive/common/log.py
 hyperdrive/common/parser.py
 hyperdrive/common/response.py
-hyperdrive/common/timeutils.py
 hyperdrive/common/utils.py
 hyperdrive/db/__init__.py
 hyperdrive/db/cache.py

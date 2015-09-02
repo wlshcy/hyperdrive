@@ -1,7 +1,7 @@
 import sys
 import logging
 
-from nae.common import cfg
+from hyperdrive.common import cfg
 
 CONF = cfg.CONF
 
