@@ -11,6 +11,7 @@ class Controller(Base):
         super(Controller, self).__init__()
 
     def create(self, req, body):
+        """User auth"""
         mobile = body.pop('mobile')
         password = body.pop('password')
 

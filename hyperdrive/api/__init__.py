@@ -5,6 +5,7 @@ from hyperdrive.api import auth
 from hyperdrive.api import items
 from hyperdrive.api import orders
 from hyperdrive.api import users
+from hyperdrive.api import address
 from hyperdrive.api import sms
 
 
@@ -25,6 +26,8 @@ class APIRouter(wsgi.Router):
         self.mapper.resource('order', 'orders', controller=orders.create_resource())
 
         self.mapper.resource('user', 'users', controller=users.create_resource())
+
+        self.mapper.resource('address', 'addresses', controller=address.create_resource())
 
         self.mapper.connect('/auth',
                             controller=auth.create_resource(),

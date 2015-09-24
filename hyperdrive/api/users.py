@@ -31,26 +31,27 @@ class Controller(Base):
             - mobile
         If no user found, empty list will be returned.
         """
-        users = []
-
-        # FIXME(nmg): should catch exception if any
-        queries = self.db.get_users()
-
-        for query in queries:
-            user = {
-                'id': str(query['_id']),
-                'mobile': query['mobile'],
-                'created': query['created'],
-            }
-            users.append(user)
-
-        return HttpResponse(users)
+        # users = []
+        #
+        # # FIXME(nmg): should catch exception if any
+        # queries = self.db.get_users()
+        #
+        # for query in queries:
+        #     user = {
+        #         'id': str(query['_id']),
+        #         'mobile': query['mobile'],
+        #         'created': query['created'],
+        #     }
+        #     users.append(user)
+        #
+        # return HttpResponse(users)
+        return webob.exc.HTTPMethodNotAllowed()
 
     def show(self, req, id):
         """
         Show the user info according to user's id `id`.
         """
-        raise NotImplementedError
+        raise webob.exc.HTTPMethodNotAllowed()
 
     def create(self, req, body=None):
         """

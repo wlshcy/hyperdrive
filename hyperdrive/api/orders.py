@@ -44,13 +44,15 @@ class Controller(Base):
         except jwt.InvalidTokenError:
             return webob.exc.HTTPUnauthorized()
 
+        lastid = req.context['lastid']
+        length = req.context['length']
         user_id = payload['id']
 
         orders = []
 
         # FIXME(nmg): should catch all exception if any
         try:
-            queries = self.db.get_orders(user_id)
+            queries = self.db.get_orders(user_id, lastid, length)
         except AttributeError:
             return webob.exc.HTTPInternalServerError()
 
@@ -76,10 +78,22 @@ class Controller(Base):
             - number
             - items
             - price
+            - freight
+            - discount
             - address
+            - status
             - created
         If no order found, 404 will returned.
         """
+        try:
+            token = req.headers['X-AUTH-TOKEN']
+        except KeyError:
+            return webob.exc.HTTPUnauthorized()
+
+        try:
+            jwt.decode(token)
+        except jwt.InvalidTokenError:
+            return webob.exc.HTTPUnauthorized()
 
         # FIXME(nmg): should catch exception if any
         query = self.db.get_order(id)
@@ -101,10 +115,10 @@ class Controller(Base):
         """
         For creating item, body should not be None and
         should contains the following params:
-            - address  the address of the order
-            - items    the items list
-            - price    the total price of the order
-            - weight   the total weight of the order
+            - address  the address of the order name:mobile:address
+            - items    the items list [{'id': x, 'count': y}, ...]
+            - price    the total price of the order  float
+            - weight   the total weight of the order float
         """
         try:
             token = req.headers['X-AUTH-TOKEN']
@@ -116,7 +130,7 @@ class Controller(Base):
         except jwt.InvalidTokenError:
             return webob.exc.HTTPUnauthorized()
 
-        user_id = payload['id']
+        uid = payload['uid']
 
         try:
             address = body.pop('address')
@@ -129,9 +143,10 @@ class Controller(Base):
 
         # __id__ = uuid.uuid4().hex
         number = utils.generate_order_number()
-        payment = 0
-        delivery = 0
-        uid = user_id
+        # payment = 0
+        # delivery = 0
+        status = 0
+        uid = uid
         created = round(time.time() * 1000)
 
         order = {
@@ -140,9 +155,12 @@ class Controller(Base):
             'uid': uid,
             'price': price,
             'weight': weight,
-            'payment': payment,
-            'delivery': delivery,
+            # 'payment': payment,
+            # 'delivery': delivery,
+            'status': status,
             'address': address,
+            'freight': 0,
+            'discount': 0,
             'created': created
             }
 
@@ -204,16 +222,35 @@ class Controller(Base):
         """
         delete item according to item id `id`
         """
+        try:
+            token = req.headers['X-AUTH-TOKEN']
+        except KeyError:
+            return webob.exc.HTTPUnauthorized()
+
+        try:
+            jwt.decode(token)
+        except jwt.InvalidTokenError:
+            return webob.exc.HTTPUnauthorized()
+
         # FIXME(nmg): should catch exception if any
         self.db.delete_item(id)
 
         return Response(201)
 
-    def update(self, req, id, body):
-        """Updated container information"""
+    def update(self, req, id, status):
+        """Updated order status"""
+        try:
+            token = req.headers['X-AUTH-TOKEN']
+        except KeyError:
+            return webob.exc.HTTPUnauthorized()
+
+        try:
+            jwt.decode(token)
+        except jwt.InvalidTokenError:
+            return webob.exc.HTTPUnauthorized()
 
         # FIXME(nmg): should catch exception if any
-        self.db.update_item(id, body)
+        self.db.update_order(id, status)
 
         return Response(201)
 

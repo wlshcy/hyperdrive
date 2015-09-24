@@ -59,6 +59,7 @@ class Controller(Base):
             - price
             - size
             - origin
+            - desc
         If no item found, 404 will returned.
         """
         # FIXME(nmg): should catch exception if any
@@ -68,9 +69,11 @@ class Controller(Base):
             return Fault(webob.exc.HTTPNotFound())
 
         item = {
+            'id': str(query['_id']),
             'name': query['name'],
             'img': query['img'],
             'price': query['price'],
+            'size': query['size'],
             'origin': query['origin'],
             'desc': query['desc']
         }
@@ -86,6 +89,7 @@ class Controller(Base):
             - price       the price of the item
             - size        the size of the item
             - origin      the origin of the item
+            - desc        short description
         """
         # id = uuid.uuid4().hex
         name = body.pop('name')
