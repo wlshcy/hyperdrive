@@ -19,7 +19,7 @@ class Controller(Base):
 
     def index(self, req):
         """
-        List all items 
+        List all fruits
         
         This method returns a dictionary list and each dict contains the following keys:
             - id 
@@ -27,16 +27,16 @@ class Controller(Base):
             - img 
             - price 
             - size
-        If no item found, empty list will be returned.
+        If no fruit found, empty list will be returned.
         """
 
-        items = []
+        fruits = []
 
         # FIXME(nmg): should catch exception if any
-        queries = self.db.get_items()
+        queries = self.db.get_fruits()
 
         for query in queries:
-            item = {
+            fruit = {
                 'id': str(query['_id']),
                 # 'id': query['id'],
                 'name': query['name'],
@@ -44,13 +44,13 @@ class Controller(Base):
                 'price': query['price'],
                 'size': query['size']
             }
-            items.append(item)
+            fruits.append(fruit)
 
-        return HttpResponse(items)
+        return HttpResponse(fruits)
 
     def show(self, req, id):
         """
-        Show the item info according to item's id `id`.
+        Show the fruit info according to fruit's id `id`.
 
         This method returns a dictionary with the following keys:
             - id
@@ -63,12 +63,12 @@ class Controller(Base):
         If no item found, 404 will returned.
         """
         # FIXME(nmg): should catch exception if any
-        query = self.db.get_item(id)
+        query = self.db.get_fruit(id)
 
         if not query:
             return Fault(webob.exc.HTTPNotFound())
 
-        item = {
+        fruit = {
             'id': str(query['_id']),
             'name': query['name'],
             'img': query['img'],
@@ -78,59 +78,25 @@ class Controller(Base):
             'desc': query['desc']
         }
 
-        return HttpResponse(item)
+        return HttpResponse(fruit)
 
     def create(self, req, body=None):
         """
-        For creating item, body should not be None and
-        should contains the following params:
-            - name        the name of the item
-            - img         the image's of the item
-            - price       the price of the item
-            - size        the size of the item
-            - origin      the origin of the item
-            - desc        short description
+        This operation should be done from management backend.
         """
-        # id = uuid.uuid4().hex
-        name = body.pop('name')
-        img = body.pop('img')
-        price = body.pop('price')
-        size = body.pop('size')
-        origin = body.pop('origin')
-        desc = body.pop('desc')
-        created = round(time.time() * 1000)
-
-        item = {
-            'name': name,
-            'img': img,
-            'price': price,
-            'size': size,
-            'origin': origin,
-            'desc': desc,
-            'created': created
-            }
-
-        # FIXME(nmg): should catch exception if any
-        self.db.add_item(item)
-
-        return Response(201)
+        raise NotImplementedError()
 
     def delete(self, req, id):
         """
-        delete item according to item id `id`
+        This operation should be done from management backend.
         """
-        # FIXME(nmg): should catch exception if any
-        self.db.delete_item(id)
-
-        return Response(201)
+        raise NotImplementedError()
 
     def update(self, req, id, body):
-        """Updated container information"""
-
-        # FIXME(nmg): should catch exception if any
-        self.db.update_item(id, body)
-
-        return Response(200)
+        """
+        This operation should be done from management backend.
+        """
+        raise NotImplementedError()
 
 
 def create_resource():
