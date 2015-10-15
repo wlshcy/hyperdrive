@@ -91,46 +91,49 @@ class Controller(Base):
             - origin      the origin of the item
             - desc        short description
         """
-        # id = uuid.uuid4().hex
-        name = body.pop('name')
-        img = body.pop('img')
-        price = body.pop('price')
-        size = body.pop('size')
-        origin = body.pop('origin')
-        desc = body.pop('desc')
-        created = round(time.time() * 1000)
-
-        item = {
-            'name': name,
-            'img': img,
-            'price': price,
-            'size': size,
-            'origin': origin,
-            'desc': desc,
-            'created': created
-            }
-
-        # FIXME(nmg): should catch exception if any
-        self.db.add_item(item)
-
-        return Response(201)
+        # # id = uuid.uuid4().hex
+        # name = body.pop('name')
+        # img = body.pop('img')
+        # price = body.pop('price')
+        # size = body.pop('size')
+        # origin = body.pop('origin')
+        # desc = body.pop('desc')
+        # created = round(time.time() * 1000)
+        #
+        # item = {
+        #     'name': name,
+        #     'img': img,
+        #     'price': price,
+        #     'size': size,
+        #     'origin': origin,
+        #     'desc': desc,
+        #     'created': created
+        #     }
+        #
+        # # FIXME(nmg): should catch exception if any
+        # self.db.add_item(item)
+        #
+        # return Response(201)
+        raise NotImplementedError()
 
     def delete(self, req, id):
         """
         delete item according to item id `id`
         """
         # FIXME(nmg): should catch exception if any
-        self.db.delete_item(id)
-
-        return Response(201)
+        # self.db.delete_item(id)
+        #
+        # return Response(201)
+        raise NotImplementedError()
 
     def update(self, req, id, body):
         """Updated container information"""
 
         # FIXME(nmg): should catch exception if any
-        self.db.update_item(id, body)
-
-        return Response(200)
+        # self.db.update_item(id, body)
+        #
+        # return Response(200)
+        raise NotImplementedError()
 
 
 def create_resource():
