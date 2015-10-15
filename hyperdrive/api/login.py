@@ -10,7 +10,7 @@ class Controller(Base):
     def __init__(self):
         super(Controller, self).__init__()
 
-    def create(self, req, body):
+    def login(self, req, body):
         """User auth"""
         mobile = body.pop('mobile')
         password = body.pop('password')

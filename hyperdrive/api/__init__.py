@@ -1,7 +1,7 @@
 import routes
 
 from hyperdrive import wsgi
-from hyperdrive.api import auth
+from hyperdrive.api import login 
 from hyperdrive.api import items
 from hyperdrive.api import orders
 from hyperdrive.api import users
@@ -29,9 +29,9 @@ class APIRouter(wsgi.Router):
 
         self.mapper.resource('address', 'addresses', controller=address.create_resource())
 
-        self.mapper.connect('/auth',
-                            controller=auth.create_resource(),
-                            action='create',
+        self.mapper.connect('/login',
+                            controller=login.create_resource(),
+                            action='login',
                             conditions={'method': ['POST']})
 
         self.mapper.connect('/sms',
