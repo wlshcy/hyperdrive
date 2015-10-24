@@ -87,7 +87,7 @@ class Controller(Base):
 
         return HttpResponse(address)
 
-    def create(self, req, body=None):
+    def create(self, req, body):
         """
         For creating item, body should not be None and
         should contains the following params:
@@ -107,9 +107,13 @@ class Controller(Base):
 
         uid = payload['uid']
 
-        name = body.pop('name')
-        mobile = body.pop('mobile')
-        address = body.pop('address')
+        try:
+            name = body.pop('name')
+            mobile = body.pop('mobile')
+            address = body.pop('address')
+        except KeyError:
+            return webob.exc.HTTPBadRequest()
+
         created = round(time.time() * 1000)
 
         address = {
