@@ -199,3 +199,62 @@ class MongoAPI(object):
         coll = self.connection[self.db][invent]
 
         return coll.find_one({'mobile': mobile})
+
+    def add_address(self, address, invent='addresses'):
+        """
+        Add user address
+        :param address: the address to be added
+        :param invent: the address table
+        :return:
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.insert(address)
+
+    def get_addresses(self, uid, invent='addresses'):
+        """
+        List all addresses filter by uid
+        :param uid: the user id whose addresses will be list
+        :param invent: address table
+        :return: List of all addresses
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.find({'uid': uid})
+
+    def get_address(self, address_id, invent='addresses'):
+        """
+        Show specified address according address_id
+        :param address_id: the address id
+        :param invent: address table
+        :return: Dict of address
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.find_one({'id': address_id})
+
+    def delete_address(self, address_id, invent='addresses'):
+        """
+        Delete address according to address_id
+        :param address_id: the address to be deleted
+        :param invent: address table
+        :return: None
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.remove({'id': address_id})
+
+    def update_address(self, __id__, data, invent='addresses'):
+        """
+        Update address information
+        :param id: the address to be updated
+        :param body: the content to be updated
+        :param invent: address table
+        :return: None
+        """
+        query = {'id': __id__}
+        update = {'$set': data}
+
+        coll = self.connection[self.db][invent]
+
+        return coll.update(query, update)
