@@ -20,7 +20,7 @@ class Controller(Base):
 
     def index(self, req):
         """
-        List all address
+        List all addresses
         
         This method returns a dictionary list and each dict contains the following keys:
             - id 
@@ -89,7 +89,7 @@ class Controller(Base):
 
     def create(self, req, body):
         """
-        For creating item, body should not be None and
+        For creating address, body should not be None and
         should contains the following params:
             - name        the name of the user
             - mobile         the mobile of the user
@@ -131,7 +131,7 @@ class Controller(Base):
 
     def delete(self, req, id):
         """
-        delete item according to item id `id`
+        delete address according to address id `id`
         """
         try:
             token = req.headers['X-AUTH-TOKEN']
@@ -149,7 +149,7 @@ class Controller(Base):
         return Response(201)
 
     def update(self, req, id, body):
-        """Updated container information"""
+        """Updated address information"""
 
         try:
             token = req.headers['X-AUTH-TOKEN']
