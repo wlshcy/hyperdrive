@@ -1,10 +1,9 @@
-import uuid
 from hyperdrive import wsgi
 from hyperdrive.common import log as logging
-from hyperdrive.common.response import Response, HttpResponse
+from hyperdrive.common.response import HttpResponse
 from hyperdrive.common import cfg
 from hyperdrive.base import Base
-import time
+
 import webob.exc
 from hyperdrive.common.exception import Fault
 
