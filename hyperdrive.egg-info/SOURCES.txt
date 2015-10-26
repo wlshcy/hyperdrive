@@ -11,8 +11,10 @@ hyperdrive.egg-info/SOURCES.txt
 hyperdrive.egg-info/dependency_links.txt
 hyperdrive.egg-info/top_level.txt
 hyperdrive/api/__init__.py
-hyperdrive/api/auth.py
+hyperdrive/api/address.py
+hyperdrive/api/fruits.py
 hyperdrive/api/items.py
+hyperdrive/api/login.py
 hyperdrive/api/orders.py
 hyperdrive/api/sms.py
 hyperdrive/api/users.py
