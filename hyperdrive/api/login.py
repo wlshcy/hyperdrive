@@ -10,7 +10,7 @@ class Controller(Base):
     def __init__(self):
         super(Controller, self).__init__()
 
-    def login(self, req, body):
+    def login(self, _, body):
         """User login with mobile and password.
         When login success, associated token will be returned, otherwise 403 or 404 will be returned"""
         mobile = body.pop('mobile')
