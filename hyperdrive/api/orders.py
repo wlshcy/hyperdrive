@@ -44,8 +44,8 @@ class Controller(Base):
         except jwt.InvalidTokenError:
             return webob.exc.HTTPUnauthorized()
 
-        lastid = req.context['lastid']
-        length = req.context['length']
+        lastid = req.GET['lastid']
+        length = req.GET['length']
         user_id = payload['id']
 
         orders = []
