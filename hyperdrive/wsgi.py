@@ -77,7 +77,8 @@ class Resource(object):
 
         return self._process_stack(request, method, action_args)
 
-    def get_action_args(self, env):
+    @staticmethod
+    def get_action_args(env):
         try:
             args = env['wsgiorg.routing_args'][1].copy()
         except KeyError:
@@ -95,7 +96,8 @@ class Resource(object):
 
         return args
 
-    def get_body(self, request):
+    @staticmethod
+    def get_body(request):
         if len(request.body) == 0:
             return {}
         return {'body': json.loads(request.body)}
