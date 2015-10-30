@@ -1,10 +1,10 @@
-import uuid
+
 from hyperdrive import wsgi
 from hyperdrive.common import log as logging
-from hyperdrive.common.response import Response, HttpResponse
+from hyperdrive.common.response import HttpResponse
 from hyperdrive.common import cfg
 from hyperdrive.base import Base
-import time
+
 import webob.exc
 from hyperdrive.common.exception import Fault
 
@@ -19,48 +19,47 @@ class Controller(Base):
 
     def index(self, req):
         """
-        List all items 
+        List all vegetables
         
         This method returns a dictionary list and each dict contains the following keys:
-            - id 
+            - _id
             - name 
             - img 
             - price 
             - size
-        If no item found, empty list will be returned.
+        If no vegetables found, empty list will be returned.
         """
 
-        items = []
+        vegetables = []
 
         # FIXME(nmg): should catch exception if any
-        queries = self.db.get_items()
+        queries = self.db.get_vegetables()
 
         for query in queries:
             item = {
                 'id': str(query['_id']),
-                # 'id': query['id'],
                 'name': query['name'],
                 'img': query['img'],
                 'price': query['price'],
                 'size': query['size']
             }
-            items.append(item)
+            vegetables.append(item)
 
-        return HttpResponse(items)
+        return HttpResponse(vegetables)
 
     def show(self, req, id):
         """
-        Show the item info according to item's id `id`.
+        Show the vegetable info according to vegetables's id.
 
         This method returns a dictionary with the following keys:
-            - id
+            - _id
             - name
             - img
             - price
             - size
             - origin
             - desc
-        If no item found, 404 will returned.
+        If no vegetables found, 404 will returned.
         """
         # FIXME(nmg): should catch exception if any
         query = self.db.get_item(id)
