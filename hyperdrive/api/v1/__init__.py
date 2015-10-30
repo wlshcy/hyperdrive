@@ -3,6 +3,7 @@ import routes
 from hyperdrive import wsgi
 from hyperdrive.api.v1 import login 
 from hyperdrive.api.v1 import vegetables
+from hyperdrive.api.v1 import fruits
 from hyperdrive.api.v1 import orders
 from hyperdrive.api.v1 import users
 from hyperdrive.api.v1 import address
@@ -22,6 +23,8 @@ class APIRouter(wsgi.Router):
         """
 
         self.mapper.resource('vegetable', 'vegetables', controller=vegetables.create_resource())
+
+        self.mapper.resource('fruit', 'fruits', controller=fruits.create_resource())
 
         self.mapper.resource('order', 'orders', controller=orders.create_resource())
 
