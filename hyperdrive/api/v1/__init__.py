@@ -2,7 +2,7 @@ import routes
 
 from hyperdrive import wsgi
 from hyperdrive.api.v1 import login 
-from hyperdrive.api.v1 import items
+from hyperdrive.api.v1 import vegetables
 from hyperdrive.api.v1 import orders
 from hyperdrive.api.v1 import users
 from hyperdrive.api.v1 import address
@@ -18,10 +18,10 @@ class APIRouter(wsgi.Router):
 
     def _setup_routes(self):
         """
-        The following `mapper.resource` will generated the following routes:
+        Setup RESTFUL routers.
         """
 
-        self.mapper.resource('item', 'items', controller=items.create_resource())
+        self.mapper.resource('vegetable', 'vegetables', controller=vegetables.create_resource())
 
         self.mapper.resource('order', 'orders', controller=orders.create_resource())
 
