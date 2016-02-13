@@ -14,11 +14,15 @@ hyperdrive/api/__init__.py
 hyperdrive/api/v1/__init__.py
 hyperdrive/api/v1/address.py
 hyperdrive/api/v1/fruits.py
-hyperdrive/api/v1/items.py
 hyperdrive/api/v1/login.py
+hyperdrive/api/v1/meats.py
 hyperdrive/api/v1/orders.py
 hyperdrive/api/v1/sms.py
+hyperdrive/api/v1/specialties.py
 hyperdrive/api/v1/users.py
+hyperdrive/api/v1/veg_slides.py
+hyperdrive/api/v1/vegetables.py
+hyperdrive/api/v1/zone.py
 hyperdrive/common/__init__.py
 hyperdrive/common/cfg.py
 hyperdrive/common/exception.py

@@ -98,6 +98,7 @@ class Resource(object):
 
     @staticmethod
     def get_body(request):
+        LOG.info(request.body);	
         if len(request.body) == 0:
             return {}
         return {'body': json.loads(request.body)}

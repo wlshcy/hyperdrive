@@ -1,3 +1,4 @@
+
 from hyperdrive import wsgi
 from hyperdrive.common import log as logging
 from hyperdrive.common.response import HttpResponse
@@ -18,83 +19,161 @@ class Controller(Base):
 
     def index(self, req):
         """
-        List all specialties
+        List all specialties 
         
         This method returns a dictionary list and each dict contains the following keys:
-            - id
+            - _id
             - name 
-            - img 
+            - photo 
             - price 
+            - mprice
             - size
         If no specialties found, empty list will be returned.
         """
+	length = req.GET.get('length', 1)
+        lastid = req.GET.get('lastid', 0)
+	
 
         specialties = []
 
         # FIXME(nmg): should catch exception if any
-        queries = self.db.get_specialties()
+        queries = self.db.get_specialties(lastid, length)
 
         for query in queries:
-            specialty = {
+            item = {
                 'id': str(query['_id']),
                 'name': query['name'],
-                'img': query['img'],
+                'photo': query['photo'],
                 'price': query['price'],
+                'mprice': query['mprice'],
                 'size': query['size']
             }
-            specialties.append(specialty)
+            specialties.append(item)
 
         return HttpResponse(specialties)
 
     def show(self, req, id):
         """
-        Show the specialty's info according to specialty's id.
+        Show the specialty info according to specialties's id.
 
         This method returns a dictionary with the following keys:
-            - id
+            - _id
             - name
             - img
             - price
             - size
             - origin
             - desc
-        If no specialty found, 404 will returned.
+        If no specialties found, 404 will returned.
         """
         # FIXME(nmg): should catch exception if any
-        query = self.db.get_specialty(id)
+        query = self.db.get_spe(id)
+        LOG.info(query)
 
         if not query:
             return Fault(webob.exc.HTTPNotFound())
 
-        specialty = {
+        item = {
             'id': str(query['_id']),
             'name': query['name'],
-            'img': query['img'],
+            'photo': query['photo'],
             'price': query['price'],
+            'mprice': query['mprice'],
             'size': query['size'],
             'origin': query['origin'],
             'desc': query['desc']
         }
 
-        return HttpResponse(specialty)
+        return HttpResponse(item)
 
     def create(self, req, body=None):
         """
-        This operation should be done from management backend.
+        For creating item, body should not be None and
+        should contains the following params:
+            - name        the name of the item
+            - img         the image's of the item
+            - price       the price of the item
+            - size        the size of the item
+            - origin      the origin of the item
+            - desc        short description
         """
+        # # id = uuid.uuid4().hex
+        # name = body.pop('name')
+        # img = body.pop('img')
+        # price = body.pop('price')
+        # size = body.pop('size')
+        # origin = body.pop('origin')
+        # desc = body.pop('desc')
+        # created = round(time.time() * 1000)
+        #
+        # item = {
+        #     'name': name,
+        #     'img': img,
+        #     'price': price,
+        #     'size': size,
+        #     'origin': origin,
+        #     'desc': desc,
+        #     'created': created
+        #     }
+        #
+        # # FIXME(nmg): should catch exception if any
+        # self.db.add_item(item)
+        #
+        # return Response(201)
         raise NotImplementedError()
 
     def delete(self, req, id):
         """
-        This operation should be done from management backend.
+        delete item according to item id `id`
         """
+        # FIXME(nmg): should catch exception if any
+        # self.db.delete_item(id)
+        #
+        # return Response(201)
         raise NotImplementedError()
 
     def update(self, req, id, body):
-        """
-        This operation should be done from management backend.
-        """
+        """Updated container information"""
+
+        # FIXME(nmg): should catch exception if any
+        # self.db.update_item(id, body)
+        #
+        # return Response(200)
         raise NotImplementedError()
+
+    def slides(self, req):
+        """
+        List all specialty slides
+        
+        This method returns a dictionary list and each dict contains the following keys:
+            - _id
+            - name 
+            - photo 
+            - price 
+            - mprice
+            - size
+        If no specialties found, empty list will be returned.
+        """
+	length = req.GET.get('length', 10)
+	
+
+        slides = []
+
+        # FIXME(nmg): should catch exception if any
+        queries = self.db.get_spt_slides()
+
+        for query in queries:
+            item = {
+                'id': str(query['_id']),
+                'name': query['name'],
+                'photo': query['photo'],
+                'price': query['price'],
+                'mprice': query['mprice'],
+                'size': query['size']
+            }
+            slides.append(item)
+
+        return HttpResponse(slides)
 
 
 def create_resource():

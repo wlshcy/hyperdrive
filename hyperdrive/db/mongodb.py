@@ -3,11 +3,13 @@ __author__ = 'nmg'
 
 __all__ = ['MongoAPI']
 
+import pymongo
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 from hyperdrive.common import log as logging
 import sys
 import time
+from bson import ObjectId
 
 
 logger = logging.getLogger(__name__)
@@ -43,22 +45,26 @@ class MongoAPI(object):
     def _connect(self):
         self.connection = MongoClient(self.host, self.port)
 
-    def add_item(self, item, coll='items'):
+
+    def get_vegetables(self, lastid, length, invent='veg'):
         """
-        Insert items in collection.
+        Get vegetables from collection veg.
 
-        @param coll: the collection, default to `items`
-        @param msg: the items be saved
+        @param invent: the collection
 
-        @return: a WriteResult object that contains the status of the operation(not used currently)
+        @return: `pymongo.cursor.Cursor object`
         """
-        coll = self.connection[self.db][coll]
 
-        return coll.insert(item)
+        coll = self.connection[self.db][invent]
+        print(lastid)
+	if lastid == 0:
+            return coll.find({'slide': '1'}).sort('_id',pymongo.ASCENDING).limit(int(length))
+        else:
+	    return coll.find({'slide': '1', '_id':{'$gt':ObjectId(lastid)}}).sort('_id',pymongo.ASCENDING).limit(int(length))
 
-    def get_items(self, invent='items'):
+    def get_veg_slides(self, invent='veg'):
         """
-        Get items from collection.
+        Get vegetables from collection veg.
 
         @param invent: the collection
 
@@ -67,20 +73,106 @@ class MongoAPI(object):
 
         coll = self.connection[self.db][invent]
 
-        return coll.find({})
+        return coll.find({'slide': '0'})
 
-    def get_item(self,  __id__, invent='items'):
+
+    def get_veg(self,  __id__, invent='veg'):
         """
         Get specified item according item id.
 
-        @param invent: the item table
-        @param id: the item id
+        @param invent: the veg table
+        @param id: the veg id
 
         @return: `pymongo.cursor.Cursor object`
         """
         coll = self.connection[self.db][invent]
 
-        return coll.find_one({'id': __id__})
+        return coll.find_one({'_id': ObjectId(__id__)})
+
+    def get_frts(self, lastid, length, invent='frt'):
+        """
+        Get fruits from collection frt.
+
+        @param invent: the collection
+
+        @return: `pymongo.cursor.Cursor object`
+        """
+
+        coll = self.connection[self.db][invent]
+        print(lastid)
+	if lastid == 0:
+            return coll.find({'slide': '1'}).sort('_id',pymongo.ASCENDING).limit(int(length))
+        else:
+	    return coll.find({'slide': '1', '_id':{'$gt':ObjectId(lastid)}}).sort('_id',pymongo.ASCENDING).limit(int(length))
+
+    def get_frt_slides(self, invent='frt'):
+        """
+        Get fruits from collection frt.
+
+        @param invent: the collection
+
+        @return: `pymongo.cursor.Cursor object`
+        """
+
+        coll = self.connection[self.db][invent]
+
+        return coll.find({'slide': '0'})
+
+
+    def get_frt(self,  __id__, invent='frt'):
+        """
+        Get specified item according item id.
+
+        @param invent: the fruit table
+        @param id: the frt id
+
+        @return: `pymongo.cursor.Cursor object`
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.find_one({'_id': ObjectId(__id__)})
+
+    def get_specialties(self, lastid, length, invent='spe'):
+        """
+        Get specialties from collection spe.
+
+        @param invent: the collection
+
+        @return: `pymongo.cursor.Cursor object`
+        """
+
+        coll = self.connection[self.db][invent]
+	if lastid == 0:
+            return coll.find({'slide': '1'}).sort('_id',pymongo.ASCENDING).limit(int(length))
+        else:
+	    return coll.find({'slide': '1', '_id':{'$gt':ObjectId(lastid)}}).sort('_id',pymongo.ASCENDING).limit(int(length))
+
+    def get_spe_slides(self, invent='spe'):
+        """
+        Get specialty slides from collection spe.
+
+        @param invent: the collection
+
+        @return: `pymongo.cursor.Cursor object`
+        """
+
+        coll = self.connection[self.db][invent]
+
+        return coll.find({'slide': '0'})
+
+
+    def get_spe(self,  __id__, invent='spe'):
+        """
+        Get specified item according item id.
+
+        @param invent: the spe table
+        @param id: the spe id
+
+        @return: `pymongo.cursor.Cursor object`
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.find_one({'_id': ObjectId(__id__)})
 
     def delete_item(self, id, invent='items'):
         """
@@ -233,7 +325,7 @@ class MongoAPI(object):
 
         return coll.find_one({'id': address_id})
 
-    def delete_address(self, address_id, invent='addresses'):
+    def delete_address(self, __id__, invent='addresses'):
         """
         Delete address according to address_id
         :param address_id: the address to be deleted
@@ -242,7 +334,7 @@ class MongoAPI(object):
         """
         coll = self.connection[self.db][invent]
 
-        return coll.remove({'id': address_id})
+        return coll.remove({'_id': ObjectId(__id__)})
 
     def update_address(self, __id__, data, invent='addresses'):
         """

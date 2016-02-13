@@ -24,23 +24,28 @@ class Controller(Base):
         This method returns a dictionary list and each dict contains the following keys:
             - _id
             - name 
-            - img 
+            - photo 
             - price 
+            - mprice
             - size
         If no vegetables found, empty list will be returned.
         """
+	length = req.GET.get('length', 1)
+        lastid = req.GET.get('lastid', 0)
+	
 
         vegetables = []
 
         # FIXME(nmg): should catch exception if any
-        queries = self.db.get_vegetables()
+        queries = self.db.get_vegetables(lastid, length)
 
         for query in queries:
             item = {
                 'id': str(query['_id']),
                 'name': query['name'],
-                'img': query['img'],
+                'photo': query['photo'],
                 'price': query['price'],
+                'mprice': query['mprice'],
                 'size': query['size']
             }
             vegetables.append(item)
@@ -62,7 +67,8 @@ class Controller(Base):
         If no vegetables found, 404 will returned.
         """
         # FIXME(nmg): should catch exception if any
-        query = self.db.get_item(id)
+        query = self.db.get_veg(id)
+        LOG.info(query)
 
         if not query:
             return Fault(webob.exc.HTTPNotFound())
@@ -70,8 +76,9 @@ class Controller(Base):
         item = {
             'id': str(query['_id']),
             'name': query['name'],
-            'img': query['img'],
+            'photo': query['photo'],
             'price': query['price'],
+            'mprice': query['mprice'],
             'size': query['size'],
             'origin': query['origin'],
             'desc': query['desc']
@@ -133,6 +140,40 @@ class Controller(Base):
         #
         # return Response(200)
         raise NotImplementedError()
+
+    def slides(self, req):
+        """
+        List all vegetable slides
+        
+        This method returns a dictionary list and each dict contains the following keys:
+            - _id
+            - name 
+            - photo 
+            - price 
+            - mprice
+            - size
+        If no vegetables found, empty list will be returned.
+        """
+	length = req.GET.get('length', 10)
+	
+
+        slides = []
+
+        # FIXME(nmg): should catch exception if any
+        queries = self.db.get_veg_slides()
+
+        for query in queries:
+            item = {
+                'id': str(query['_id']),
+                'name': query['name'],
+                'photo': query['photo'],
+                'price': query['price'],
+                'mprice': query['mprice'],
+                'size': query['size']
+            }
+            slides.append(item)
+
+        return HttpResponse(slides)
 
 
 def create_resource():

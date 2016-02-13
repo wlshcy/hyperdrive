@@ -30,17 +30,18 @@ class Controller(Base):
             - created
         If no item found, empty list will be returned.
         """
-        try:
-            token = req.headers['X-AUTH-TOKEN']
-        except KeyError:
-            return webob.exc.HTTPUnauthorized()
+        #try:
+        #    token = req.headers['X-AUTH-TOKEN']
+        #except KeyError:
+        #    return webob.exc.HTTPUnauthorized()
 
-        try:
-            payload = jwt.decode(token)
-        except jwt.InvalidTokenError:
-            return webob.exc.HTTPUnauthorized()
+        #try:
+        #    payload = jwt.decode(token)
+        #except jwt.InvalidTokenError:
+        #    return webob.exc.HTTPUnauthorized()
 
-        uid = payload['uid']
+        #uid = payload['uid']
+	uid = 'cxb1769815'
 
         addresses = []
 
@@ -52,11 +53,13 @@ class Controller(Base):
                 'id': str(query['_id']),
                 'name': query['name'],
                 'mobile': query['mobile'],
+                'region': query['region'],
                 'address': query['address'],
                 'created': query['created'],
             }
             addresses.append(address)
 
+        LOG.info(addresses);
         return HttpResponse(addresses)
 
     def show(self, req, id):
@@ -95,21 +98,23 @@ class Controller(Base):
             - mobile         the mobile of the user
             - address       the address of the user
         """
-        try:
-            token = req.headers['X-AUTH-TOKEN']
-        except KeyError:
-            return webob.exc.HTTPUnauthorized()
+        #try:
+        #    token = req.headers['X-AUTH-TOKEN']
+        #except KeyError:
+        #    return webob.exc.HTTPUnauthorized()
 
-        try:
-            payload = jwt.decode(token)
-        except jwt.InvalidTokenError:
-            return webob.exc.HTTPUnauthorized()
+        #try:
+        #    payload = jwt.decode(token)
+        #except jwt.InvalidTokenError:
+        #    return webob.exc.HTTPUnauthorized()
 
-        uid = payload['uid']
+        #uid = payload['uid']
+        uid = "cxb1769815"
 
         try:
             name = body.pop('name')
             mobile = body.pop('mobile')
+            region = body.pop('region')
             address = body.pop('address')
         except KeyError:
             return webob.exc.HTTPBadRequest()
@@ -120,6 +125,7 @@ class Controller(Base):
             'uid': uid,
             'name': name,
             'mobile': mobile,
+            'region': region,
             'address': address,
             'created': created
             }
@@ -133,15 +139,15 @@ class Controller(Base):
         """
         delete address according to address id `id`
         """
-        try:
-            token = req.headers['X-AUTH-TOKEN']
-        except KeyError:
-            return webob.exc.HTTPUnauthorized()
+        #try:
+        #    token = req.headers['X-AUTH-TOKEN']
+        #except KeyError:
+        #    return webob.exc.HTTPUnauthorized()
 
-        try:
-            jwt.decode(token)
-        except jwt.InvalidTokenError:
-            return webob.exc.HTTPUnauthorized()
+        #try:
+        #    jwt.decode(token)
+        #except jwt.InvalidTokenError:
+        #    return webob.exc.HTTPUnauthorized()
 
         # FIXME(nmg): should catch exception if any
         self.db.delete_address(id)

@@ -30,14 +30,13 @@ class Controller(Base):
             - size
         If no vegetables found, empty list will be returned.
         """
-	length = req.GET.get('length', 1)
-        lastid = req.GET.get('lastid', 0)
+	length = req.GET.get('length', 10)
 	
 
-        frts = []
+        vegetables = []
 
         # FIXME(nmg): should catch exception if any
-        queries = self.db.get_frts(lastid, length)
+        queries = self.db.get_vegetables()
 
         for query in queries:
             item = {
@@ -48,9 +47,9 @@ class Controller(Base):
                 'mprice': query['mprice'],
                 'size': query['size']
             }
-            frts.append(item)
+            vegetables.append(item)
 
-        return HttpResponse(frts)
+        return HttpResponse(vegetables)
 
     def show(self, req, id):
         """
@@ -67,7 +66,7 @@ class Controller(Base):
         If no vegetables found, 404 will returned.
         """
         # FIXME(nmg): should catch exception if any
-        query = self.db.get_frt(id)
+        query = self.db.get_veg(id)
         LOG.info(query)
 
         if not query:
@@ -140,40 +139,6 @@ class Controller(Base):
         #
         # return Response(200)
         raise NotImplementedError()
-
-    def slides(self, req):
-        """
-        List all vegetable slides
-        
-        This method returns a dictionary list and each dict contains the following keys:
-            - _id
-            - name 
-            - photo 
-            - price 
-            - mprice
-            - size
-        If no vegetables found, empty list will be returned.
-        """
-	length = req.GET.get('length', 10)
-	
-
-        slides = []
-
-        # FIXME(nmg): should catch exception if any
-        queries = self.db.get_frt_slides()
-
-        for query in queries:
-            item = {
-                'id': str(query['_id']),
-                'name': query['name'],
-                'photo': query['photo'],
-                'price': query['price'],
-                'mprice': query['mprice'],
-                'size': query['size']
-            }
-            slides.append(item)
-
-        return HttpResponse(slides)
 
 
 def create_resource():
