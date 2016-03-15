@@ -42,9 +42,9 @@ class Controller(Base):
             item = {
                 'id': str(query['_id']),
                 'name': query['name'],
-                'freq': query['photo'],
-                'num': query['price'],
-                'price': query['mprice'],
+                'freq': query['freq'],
+                'num': query['num'],
+                'price': query['price'],
             }
             combos.append(item)
 
