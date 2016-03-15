@@ -3,6 +3,7 @@ import routes
 from hyperdrive import wsgi
 from hyperdrive.api.v1 import login 
 from hyperdrive.api.v1 import vegetables
+from hyperdrive.api.v1 import combos 
 from hyperdrive.api.v1 import veg_slides
 from hyperdrive.api.v1 import fruits
 from hyperdrive.api.v1 import meats
@@ -31,6 +32,8 @@ class APIRouter(wsgi.Router):
                             action='slides',
                             conditions={'method': ['GET']})
         self.mapper.resource('vegetable', 'vegetables', controller=vegetables.create_resource())
+
+        self.mapper.resource('combo', 'combos', controller=combos.create_resource())
 
 	self.mapper.connect('/fruits/slides',
                             controller=vegetables.create_resource(),
