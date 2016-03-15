@@ -89,6 +89,23 @@ class MongoAPI(object):
 
         return coll.find_one({'_id': ObjectId(__id__)})
 
+    def get_combos(self, lastid, length, invent='combo'):
+        """
+        Get combos from collection combo.
+
+        @param invent: the collection
+
+        @return: `pymongo.cursor.Cursor object`
+        """
+
+        coll = self.connection[self.db][invent]
+        print(lastid)
+	if lastid == 0:
+            return coll.find({'slide': '1'}).sort('_id',pymongo.ASCENDING).limit(int(length))
+        else:
+	    return coll.find({'slide': '1', '_id':{'$gt':ObjectId(lastid)}}).sort('_id',pymongo.ASCENDING).limit(int(length))
+
+
     def get_frts(self, lastid, length, invent='frt'):
         """
         Get fruits from collection frt.
