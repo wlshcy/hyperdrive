@@ -25,6 +25,7 @@ class Controller(Base):
             - _id
             - name 
             - freq 
+            - weight
             - num 
             - price
         If no combos found, empty list will be returned.
@@ -43,6 +44,7 @@ class Controller(Base):
                 'id': str(query['_id']),
                 'name': query['name'],
                 'freq': query['freq'],
+                'weight': query['weight'],
                 'num': query['num'],
                 'price': query['price'],
             }
