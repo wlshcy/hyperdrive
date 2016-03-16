@@ -25,6 +25,7 @@ class Controller(Base):
             - _id
             - name 
             - freq 
+            - long 
             - weight
             - num 
             - price
@@ -44,6 +45,7 @@ class Controller(Base):
                 'id': str(query['_id']),
                 'name': query['name'],
                 'freq': query['freq'],
+                'long': query['long'],
                 'weight': query['weight'],
                 'num': query['num'],
                 'price': query['price'],
