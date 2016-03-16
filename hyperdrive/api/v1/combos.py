@@ -56,21 +56,21 @@ class Controller(Base):
 
     def show(self, req, id):
         """
-        Show the vegetable info according to vegetables's id.
+        Show the combo info according to combo's id.
 
         This method returns a dictionary with the following keys:
             - _id
             - name
-            - img
+            - photo 
+            - freq 
+            - long 
+            - weight 
+            - num 
             - price
-            - size
-            - origin
-            - desc
-        If no vegetables found, 404 will returned.
+        If no combo found, 404 will returned.
         """
         # FIXME(nmg): should catch exception if any
-        query = self.db.get_veg(id)
-        LOG.info(query)
+        query = self.db.get_combo(id)
 
         if not query:
             return Fault(webob.exc.HTTPNotFound())
@@ -79,11 +79,11 @@ class Controller(Base):
             'id': str(query['_id']),
             'name': query['name'],
             'photo': query['photo'],
-            'price': query['price'],
-            'mprice': query['mprice'],
-            'size': query['size'],
-            'origin': query['origin'],
-            'desc': query['desc']
+            'freq': query['freq'],
+            'long': query['long'],
+            'weight': query['weight'],
+            'num': query['num'],
+            'price': query['price']
         }
 
         return HttpResponse(item)
