@@ -105,6 +105,18 @@ class MongoAPI(object):
         else:
 	    return coll.find({'slide': '1', '_id':{'$gt':ObjectId(lastid)}}).sort('_id',pymongo.ASCENDING).limit(int(length))
 
+    def get_combo(self,  __id__, invent='combo'):
+        """
+        Get specified item according item id.
+
+        @param invent: the combo table
+        @param id: the combo id
+
+        @return: `pymongo.cursor.Cursor object`
+        """
+        coll = self.connection[self.db][invent]
+
+        return coll.find_one({'_id': ObjectId(__id__)})
 
     def get_frts(self, lastid, length, invent='frt'):
         """
