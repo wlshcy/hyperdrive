@@ -197,9 +197,9 @@ class Controller(Base):
             - created
         """
         item_list = []
-        for id,count in items.items():
+        for member in items:
             # FIXME(nmg): should catch exception if any
-            __item__ = self.db.get_item(id)
+            __item__ = self.db.get_item(member['id'])
 
             try:
                 name = __item__['name']
@@ -210,7 +210,7 @@ class Controller(Base):
                 logger.error(exc)
                 return webob.exc.HTTPBadRequest()
 
-            count = count 
+            count = member['count'] 
             created = created
             __id__ = uuid.uuid4().hex
             item = {
