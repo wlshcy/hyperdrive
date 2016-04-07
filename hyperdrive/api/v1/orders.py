@@ -120,47 +120,62 @@ class Controller(Base):
             - price    the total price of the order  float
             - weight   the total weight of the order float
         """
-        try:
-            token = req.headers['X-AUTH-TOKEN']
-        except KeyError:
-            return webob.exc.HTTPUnauthorized()
+        #try:
+        #    token = req.headers['X-AUTH-TOKEN']
+        #except KeyError:
+        #    return webob.exc.HTTPUnauthorized()
+
+        #try:
+        #    payload = jwt.decode(token)
+        #except jwt.InvalidTokenError:
+        #    return webob.exc.HTTPUnauthorized()
+
+        #uid = payload['uid']
+        uid = 'nmg1769815'
 
         try:
-            payload = jwt.decode(token)
-        except jwt.InvalidTokenError:
-            return webob.exc.HTTPUnauthorized()
-
-        uid = payload['uid']
-
-        try:
+            name = body.pop('address')
+            mobile = body.pop('address')
+            region = body.pop('address')
             address = body.pop('address')
             items = body.pop('items')
-            price = body.pop('price')
-            weight = body.pop('weight')
         except KeyError as exc:
             logger.error(exc)
             return webob.exc.HTTPBadRequest()
 
         # __id__ = uuid.uuid4().hex
         number = utils.generate_order_number()
-        # payment = 0
-        # delivery = 0
         status = 0
         uid = uid
         created = round(time.time() * 1000)
+	
+	total_price = 0
+        for id,count in items.items():
+	    __item__ = self.db.get_item(id)
+
+            try:
+                price = __item__['price']
+            except KeyError as exc:
+                logger.error(exc)
+                return webob.exc.HTTPBadRequest()
+
+	    total_price += price * count
+
+	freight = 0 if total_price > 49 else 10
+
+	total_price = total_price + freight
 
         order = {
             # 'id': __id__,
             'number': number,
             'uid': uid,
-            'price': price,
-            'weight': weight,
-            # 'payment': payment,
-            # 'delivery': delivery,
-            'status': status,
+            'name': name,
+            'mobile': mobile,
+            'region': region,
             'address': address,
-            'freight': 0,
-            'discount': 0,
+            'status': status,
+            'freight': freight,
+            'price': total_price,
             'created': created
             }
 
@@ -181,11 +196,9 @@ class Controller(Base):
             - created
         """
         item_list = []
-        for member in items:
-            iid = member['id']
-
+        for id,count in items.items():
             # FIXME(nmg): should catch exception if any
-            __item__ = self.db.get_item(iid)
+            __item__ = self.db.get_item(id)
 
             try:
                 name = __item__['name']
@@ -196,12 +209,12 @@ class Controller(Base):
                 logger.error(exc)
                 return webob.exc.HTTPBadRequest()
 
-            count = member['count']
+            count = count 
             created = created
             __id__ = uuid.uuid4().hex
             item = {
                 'id': __id__,
-                'iid': iid,
+                'iid': id,
                 'number': number,
                 'name': name,
                 'img': img,
@@ -216,7 +229,7 @@ class Controller(Base):
         # FIXME(nmg): should catch exception if any
         self.db.add_order_items(item_list)
 
-        return Response(201)
+        return HttpResponse({'number': number, 'price': total_price}) 
 
     def delete(self, req, id):
         """
