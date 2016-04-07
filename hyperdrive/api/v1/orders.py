@@ -135,8 +135,8 @@ class Controller(Base):
 
         try:
             name = body.pop('address')
-            mobile = body.pop('address')
-            region = body.pop('address')
+            mobile = body.pop('mobile')
+            region = body.pop('region')
             address = body.pop('address')
             items = body.pop('items')
         except KeyError as exc:
