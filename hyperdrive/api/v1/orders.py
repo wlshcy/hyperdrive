@@ -134,7 +134,7 @@ class Controller(Base):
         uid = 'nmg1769815'
 
         try:
-            name = body.pop('address')
+            name = body.pop('name')
             mobile = body.pop('mobile')
             region = body.pop('region')
             address = body.pop('address')
