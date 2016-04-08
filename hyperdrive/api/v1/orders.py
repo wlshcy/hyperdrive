@@ -151,8 +151,8 @@ class Controller(Base):
         created = round(time.time() * 1000)
 	
 	total_price = 0
-        for id,count in items.items():
-	    __item__ = self.db.get_item(id)
+        for member in items:
+	    __item__ = self.db.get_item(member['id'])
 
             try:
                 price = __item__['price']
@@ -160,7 +160,7 @@ class Controller(Base):
                 logger.error(exc)
                 return webob.exc.HTTPBadRequest()
 
-	    total_price += price * count
+	    total_price += price * member['count']
 
 	freight = 0 if total_price > 49 else 10
 
