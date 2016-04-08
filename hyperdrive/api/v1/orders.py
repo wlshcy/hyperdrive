@@ -144,7 +144,7 @@ class Controller(Base):
             return webob.exc.HTTPBadRequest()
 
 	logger.info("items", items)
-        # __id__ = uuid.uuid4().hex
+        __id__ = uuid.uuid4().hex
         number = utils.generate_order_number()
         status = 0
         uid = uid
@@ -167,7 +167,7 @@ class Controller(Base):
 	total_price = total_price + freight
 
         order = {
-            # 'id': __id__,
+            'id': __id__,
             'number': number,
             'uid': uid,
             'name': name,
