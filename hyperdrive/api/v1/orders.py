@@ -203,7 +203,7 @@ class Controller(Base):
 
             try:
                 name = __item__['name']
-                img = __item__['img']
+                photo = __item__['photo']
                 price = __item__['price']
                 size = __item__['size']
             except KeyError as exc:
@@ -218,7 +218,7 @@ class Controller(Base):
                 'iid': id,
                 'number': number,
                 'name': name,
-                'img': img,
+                'photo': photo,
                 'price': price,
                 'size': size,
                 'count': count,
