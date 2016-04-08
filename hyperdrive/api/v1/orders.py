@@ -152,7 +152,7 @@ class Controller(Base):
 	
 	total_price = 0
         for member in items:
-	    __item__ = self.db.get_item(member['id'])
+	    __item__ = self.db.get_veg(member['id'])
 
             try:
                 price = __item__['price']
@@ -199,7 +199,7 @@ class Controller(Base):
         item_list = []
         for member in items:
             # FIXME(nmg): should catch exception if any
-            __item__ = self.db.get_item(member['id'])
+            __item__ = self.db.get_veg(member['id'])
 
             try:
                 name = __item__['name']
