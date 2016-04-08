@@ -214,7 +214,7 @@ class Controller(Base):
             __id__ = uuid.uuid4().hex
             item = {
                 'id': __id__,
-                'iid': id,
+                'iid': member['id'],
                 'number': number,
                 'name': name,
                 'photo': photo,
