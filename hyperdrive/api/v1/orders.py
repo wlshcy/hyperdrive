@@ -143,7 +143,6 @@ class Controller(Base):
             logger.error(exc)
             return webob.exc.HTTPBadRequest()
 
-	logger.info("items", items)
         __id__ = uuid.uuid4().hex
         number = utils.generate_order_number()
         status = 0
